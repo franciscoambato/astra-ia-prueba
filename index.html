@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aprende Divertido - Tutor IA (10mo EGB)</title>
+  <style>
+    :root {
+      --bg-color: #fdf2f8;
+      --card-bg: #ffffff;
+      --primary: #8b5cf6;
+      --secondary: #ec4899;
+      --accent: #3b82f6;
+      --success: #10b981;
+      --text: #1e293b;
+      --border: #f1f5f9;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comic Sans MS', 'Bubblegum Sans', 'Segoe UI', Roboto, sans-serif; }
+
+    body {
+      background: linear-gradient(135deg, #e0e7ff 0%, #fef3c7 50%, #fdf2f8 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+    }
+
+    .app-container {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 850px;
+      border-radius: 24px;
+      box-shadow: 0 12px 30px rgba(139, 92, 246, 0.15);
+      border: 4px solid #fef08a;
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #ffffff;
+      padding: 24px 32px;
+      text-align: center;
+      border-bottom: 4px dashed #fef08a;
+    }
+
+    .header-title {
+      font-size: 1.8rem;
+      font-weight: bold;
+      text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+    }
+
+    .header-subtitle {
+      font-size: 1rem;
+      opacity: 0.95;
+      margin-top: 5px;
+    }
+
+    .content-body { padding: 30px; }
+
+    .form-group { margin-bottom: 22px; }
+
+    label {
+      display: block;
+      font-size: 1.05rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #6d28d9;
+    }
+
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 14px;
+      border: 3px solid #ddd6fe;
+      border-radius: 14px;
+      font-size: 1rem;
+      color: var(--text);
+      background-color: #faf5ff;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    input[type="text"]:focus, textarea:focus {
+      border-color: var(--primary);
+    }
+
+    .file-dropzone {
+      border: 3px dashed #c4b5fd;
+      padding: 16px;
+      border-radius: 14px;
+      text-align: center;
+      background-color: #faf5ff;
+      cursor: pointer;
+      color: #7c3aed;
+      font-weight: bold;
+    }
+
+    .file-dropzone:hover { background-color: #f3e8ff; }
+    input[type="file"] { display: none; }
+
+    .previews-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .preview-thumb {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 2px solid #8b5cf6;
+    }
+
+    .btn-action {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      transition: transform 0.1s, opacity 0.2s;
+    }
+
+    .btn-action:hover { opacity: 0.9; transform: translateY(-2px); }
+
+    .btn-audio {
+      background: linear-gradient(135deg, #10b981, #059669);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      margin-top: 15px;
+    }
+
+    .section-card {
+      margin-top: 25px;
+      padding: 24px;
+      border-radius: 18px;
+      background-color: #f8fafc;
+      border: 3px solid #e2e8f0;
+      display: none;
+    }
+
+    .section-card h3 {
+      color: var(--primary);
+      margin-bottom: 12px;
+      font-size: 1.3rem;
+    }
+
+    .summary-box {
+      background: #ffffff;
+      padding: 18px;
+      border-radius: 14px;
+      border: 2px solid #ddd6fe;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .question-card {
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 14px;
+      margin-bottom: 15px;
+      border: 2px solid #e2e8f0;
+    }
+
+    .question-title {
+      font-weight: bold;
+      color: #4c1d95;
+      margin-bottom: 10px;
+    }
+
+    .options-list label {
+      display: block;
+      font-weight: normal;
+      font-size: 0.95rem;
+      color: #334155;
+      margin-bottom: 6px;
+      cursor: pointer;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      background-color: #fef08a;
+      color: #854d0e;
+    }
+
+    .output-text {
+      white-space: pre-wrap;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <div class="header">
+      <div class="header-title">🌟 Tutor IA - Décimo EGB Ecuador 🌟</div>
+      <div class="header-subtitle">¡Aprende, diviértete y repasa tus materias jugando!</div>
+    </div>
+
+    <div class="content-body">
+      <!-- Ingreso del Tema e Imágenes de Referencia -->
+      <div class="form-group">
+        <label for="topicInput">📚 ¿Qué tema o materia vamos a estudiar hoy?</label>
+        <input type="text" id="topicInput" placeholder="Ej: Ecosistemas del Ecuador, Funciones Lineales, Historia...">
+      </div>
+
+      <div class="form-group">
+        <label for="imagesInput">🖼️ (Opcional) Sube imágenes de tu tarea o apuntes:</label>
+        <div class="file-dropzone" onclick="document.getElementById('imagesInput').click();">
+          Haz clic aquí para seleccionar una o varias imágenes 📷
+          <input type="file" id="imagesInput" accept="image/*" multiple onchange="previewImages(event)">
+        </div>
+        <div id="previewsContainer" class="previews-container"></div>
+      </div>
+
+      <button class="btn-action" onclick="generateLesson()">¡Generar Resumen y Examen Interactivo! 🚀</button>
+
+      <!-- Contenedor Principal de la Clase -->
+      <div id="classCard" class="section-card">
+        <span class="badge">📖 Resumen de la Materia (Con análisis de imágenes e información clave)</span>
+        <div id="summaryContainer" class="summary-box output-text"></div>
+        <button class="btn-action btn-audio" onclick="readSummaryAudioBook()">🔊 Escuchar Audiolibro (Solo Tema)</button>
+
+        <hr style="margin: 25px 0; border: 1px dashed #cbd5e1;">
+
+        <span class="badge" style="background-color: #ddd6fe; color: #5b21b6;">📝 Cuestionario Interactivo (10mo EGB)</span>
+        <div id="questionsContainer"></div>
+
+        <button class="btn-action" style="background: linear-gradient(135deg, #10b981, #059669); margin-top: 15px;" onclick="evaluateInteractiveAnswers()">✨ Calificar Mis Respuestas</button>
+      </div>
+
+      <!-- Contenedor de Resultados -->
+      <div id="evalCard" class="section-card" style="border-color: #bbf7d0; background-color: #f0fdf4;">
+        <span class="badge" style="background-color: #bbf7d0; color: #166534;">🏆 Calificación y Retroalimentación</span>
+        <div id="evalContent" class="output-text"></div>
+        <button class="btn-action btn-audio" onclick="readTextWithBetterVoice('evalContent')">🔊 Escuchar Corrección</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_KEY = "AQ.Ab8RN6IdN8Z5AX8d4KAtz80NNselx0jPjQgbNW0evA7wDHkY-w";
+    let uploadedImagesData = []; 
+    let currentLessonData = null;
+
+    function previewImages(event) {
+      const files = event.target.files;
+      const container = document.getElementById('previewsContainer');
+      container.innerHTML = "";
+      uploadedImagesData = [];
+
+      if (!files || files.length === 0) return;
+
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.className = 'preview-thumb';
+          container.appendChild(img);
+
+          const base64Clean = e.target.result.split(',')[1];
+          uploadedImagesData.push({
+            inlineData: {
+              mimeType: file.type,
+              data: base64Clean
+            }
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Bucle inteligente que reintenta automáticamente de manera silenciosa hasta que la API responda
+    async function callGeminiSilently(promptText) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${API_KEY}`;
+      
+      const parts = [{ text: promptText }];
+      if (uploadedImagesData.length > 0) {
+        uploadedImagesData.forEach(imgObj => {
+          parts.unshift(imgObj);
+        });
+      }
+
+      const bodyData = JSON.stringify({ contents: [{ parts: parts }] });
+      let delay = 3000;
+      let attempt = 1;
+
+      while (true) {
+        try {
+          const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: bodyData
+          });
+
+          const data = await response.json();
+
+          if (response.ok && data.candidates && data.candidates.length > 0) {
+            return data.candidates[0].content.parts[0].text.trim();
+          }
+
+          // Si hay alta demanda o saturación (503 / 429), reintentamos en silencio actualizando el aviso
+          if (response.status === 503 || response.status === 429 || (data.error && (data.error.code === 503 || data.error.code === 429))) {
+            document.getElementById("summaryContainer").innerText = `⏳ Los servidores están un poquito ocupados. Intentando automáticamente de nuevo (Intento ${attempt})... por favor espera un momento.`;
+            await new Promise(res => setTimeout(res, delay));
+            delay *= 1.5; // Incrementar el tiempo de espera de forma progresiva
+            attempt++;
+            continue;
+          }
+
+          throw new Error(data.error ? data.error.message : "Error al conectar con la IA.");
+        } catch (err) {
+          // Si falla por red o saturación general, esperamos un momento y seguimos intentando de manera infinita en segundo plano
+          document.getElementById("summaryContainer").innerText = `⏳ Conectando con el servidor de IA (Intento ${attempt})... por favor espera.`;
+          await new Promise(res => setTimeout(res, delay));
+          delay *= 1.5;
+          attempt++;
+        }
+      }
+    }
+
+    async function generateLesson() {
+      const topic = document.getElementById("topicInput").value.trim();
+      const classCard = document.getElementById("classCard");
+      const summaryContainer = document.getElementById("summaryContainer");
+      const questionsContainer = document.getElementById("questionsContainer");
+
+      if (!topic && uploadedImagesData.length === 0) {
+        alert("¡Por favor escribe un tema de estudio o sube al menos una imagen!");
+        return;
+      }
+
+      classCard.style.display = "block";
+      summaryContainer.innerText = "Analizando tus imágenes y preparando el cuestionario para 10mo EGB...";
+      questionsContainer.innerHTML = "";
+
+      const prompt = `Actúa como un profesor amigable y experto para estudiantes de 10mo año de Educación General Básica (Ecuador). 
+El tema central indicado es: "${topic || 'Contenido en las imágenes'}".
+Si el usuario adjuntó imágenes, analiza exhaustivamente su contenido visual (texto, gráficos, ejercicios o esquemas). 
+Elabora un resumen didáctico completo sobre el tema principal y complementa obligatoriamente la información con datos valiosos adicionales, conceptos clave y ejemplos del currículo educativo de Ecuador que enriquezcan el aprendizaje y aseguren que no quede ningún vacío importante.
+
+Debes devolver tu respuesta estrictamente estructurada en formato JSON válido con esta estructura exacta:
+{
+  "resumen": "Un resumen rico y detallado que explique la materia basándose en las imágenes y añadiendo información complementaria y valiosa de estudio.",
+  "preguntas": [
+    {
+      "id": 1,
+      "tipo": "cerrada",
+      "enunciado": "Pregunta de opción múltiple basada en el resumen...",
+      "opciones": ["Opción A", "Opción B", "Opción C", "Opción D"],
+      "respuesta_correcta": "Opción A"
+    },
+    {
+      "id": 2,
+      "tipo": "abierta",
+      "enunciado": "Pregunta abierta para responder escribiendo...",
+      "respuesta_esperada": "Concepto clave esperado"
+    }
+  ]
+}
+Genera exactamente 10 preguntas combinando cerradas y abiertas. Asegúrate de que sea un JSON puro sin formato markdown exterior (como \`\`\`json).`;
+
+      try {
+        let rawText = await callGeminiSilently(prompt);
+        rawText = rawText.replace(/```json/g, "").replace(/```/g, "").trim();
+        
+        currentLessonData = JSON.parse(rawText);
+        renderLessonUI(currentLessonData);
+      } catch (error) {
+        summaryContainer.innerText = `Ocurrió un error al procesar el JSON: ${error.message}`;
+      }
+    }
+
+    function renderLessonUI(data) {
+      const summaryContainer = document.getElementById("summaryContainer");
+      const questionsContainer = document.getElementById("questionsContainer");
+
+      summaryContainer.innerText = data.resumen;
+      questionsContainer.innerHTML = "";
+
+      data.preguntas.forEach((q, index) => {
+        const qCard = document.createElement("div");
+        qCard.className = "question-card";
+
+        let htmlContent = `<div class="question-title">Pregunta ${index + 1}: ${q.enunciado}</div>`;
+
+        if (q.tipo === "cerrada" && q.opciones) {
+          htmlContent += `<div class="options-list" data-qid="${q.id}">`;
+          q.opciones.forEach((opt) => {
+            htmlContent += `
+              <label>
+                <input type="radio" name="question_${q.id}" value="${opt}"> ${opt}
+              </label>`;
+          });
+          htmlContent += `</div>`;
+        } else {
+          htmlContent += `
+            <div style="margin-top: 8px;">
+              <textarea name="question_${q.id}" placeholder="Escribe tu respuesta aquí..."></textarea>
+            </div>`;
+        }
+
+        qCard.innerHTML = htmlContent;
+        questionsContainer.appendChild(qCard);
+      });
+    }
+
+    async function evaluateInteractiveAnswers() {
+      if (!currentLessonData) return;
+
+      let userAnswersSummary = "";
+      currentLessonData.preguntas.forEach((q, index) => {
+        if (q.tipo === "cerrada") {
+          const selected = document.querySelector(`input[name="question_${q.id}"]:checked`);
+          userAnswersSummary += `Pregunta ${index + 1}: ${selected ? selected.value : "Sin responder"}\n`;
+        } else {
+          const textInput = document.querySelector(`textarea[name="question_${q.id}"]`);
+          userAnswersSummary += `Pregunta ${index + 1}: ${textInput ? textInput.value.trim() : "Sin responder"}\n`;
+        }
+      });
+
+      const evalCard = document.getElementById("evalCard");
+      const evalContent = document.getElementById("evalContent");
+
+      evalCard.style.display = "block";
+      evalContent.innerText = "Revisando tus respuestas con mucho cariño y precisión...";
+
+      const prompt = `Con base en el cuestionario y respuestas correctas para 10mo EGB:
+---
+${JSON.stringify(currentLessonData)}
+---
+El estudiante ha seleccionado/escrito las siguientes respuestas:
+---
+${userAnswersSummary}
+---
+Actúa como un tutor muy alegre y positivo. Evalúa cada una de las 10 preguntas, dile al estudiante si acertó o falló, dale su puntuación final sobre 10 y explícale de forma motivadora por qué.`;
+
+      try {
+        const result = await callGeminiSilently(prompt);
+        evalContent.innerText = result;
+      } catch (error) {
+        evalContent.innerText = `Error al calificar: ${error.message}`;
+      }
+    }
+
+    function getBestSpanishVoice() {
+      const voices = window.speechSynthesis.getVoices();
+      const preferredVoice = voices.find(v => v.lang.startsWith('es') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Helena') || v.name.includes('Sabina')));
+      return preferredVoice || voices.find(v => v.lang.startsWith('es')) || voices[0];
+    }
+
+    function readSummaryAudioBook() {
+      if (!currentLessonData || !currentLessonData.resumen) {
+        alert("Primero genera la lección.");
+        return;
+      }
+      window.speechSynthesis.cancel();
+      
+      const utterance = new SpeechSynthesisUtterance(currentLessonData.resumen);
+      utterance.lang = "es-ES";
+      utterance.rate = 0.95;
+
+      const bestVoice = getBestSpanishVoice();
+      if (bestVoice) utterance.voice = bestVoice;
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function readTextWithBetterVoice(elementId) {
+      const text = document.getElementById(elementId).innerText;
+      if (!text) return;
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "es-ES";
+      utterance.rate = 1.0;
+
+      const bestVoice = getBestSpanishVoice();
+      if (bestVoice) utterance.voice = bestVoice;
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    if (typeof window.speechSynthesis !== 'undefined' && window.speechSynthesis.onvoiceschanged !== undefined) {
+      window.speechSynthesis.onvoiceschanged = getBestSpanishVoice;
+    }
+  </script>
+
+</body>
+</html>
